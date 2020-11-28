@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    {% load static %}
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Domine&display=swap" rel="stylesheet">
+    <title>Giriş</title>
+
+
+    <style>
+        @import url("../../static/accounts/book2.jpg");
+
+        html,body{
+        background-image: url('../../static/accounts/book2.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+
+        }
+
+        .container{
+        height: 100%;
+        align-content: center;
+        }
+
+        .card{
+        height: 430px;
+        margin-left: 20%;
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 500px;
+        background-color: rgba(0,0,0,0.5) !important;
+
+        }
+
+        .social_icon span{
+        font-size: 60px;
+        margin-left: 10px;
+        color:  #fbeaeb;
+        }
+
+        .social_icon span:hover{
+        color: #2f3c7e;
+        cursor: pointer;
+        }
+
+        .card-header h3{
+            color: white;
+          font: 400 50px/1.5 'Pacifico', Helvetica, sans-serif;
+        }
+
+        .social_icon{
+        position: absolute;
+        right: 20px;
+        top: -25px;
+        }
+
+        .input-group-prepend span{
+        width: 40px;
+        background-color: #2f3c7e;
+        color: white;
+        border:0 !important;
+        }
+
+        input:focus{
+        outline: 0 0 0 0  !important;
+        box-shadow: 0 0 0 0 !important;
+
+        }
+
+
+        .login_btn{
+        color: white;
+        background-color: #2f3c7e;
+        width: 100px;
+        }
+
+        .login_btn:hover{
+        color: #2f3c7e;
+        background-color: white;
+        }
+
+        .links{
+        color: white;
+        }
+
+        .links a{
+        margin-left: 4px;
+        color: white;
+        }
+
+
+    </style>
+
+</head>
+
+<body>
+
+
+<div class="container">
+	<div class="d-flex justify-content-center h-100">
+		<div class="card" >
+
+            <div class="card-header">
+
+                <h3>Staj Günlüğü</h3>
+
+
+            </div>
+
+			<div class="card-body">
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+					<div class="input-group form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-user"></i></span>
+						</div>
+
+						<input style="font-family: Domine, serif;" type="text" name="username" class="form-control" placeholder="Kullanıcı Adı">
+						
+					</div>
+
+                    <div class="input-group form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-key"></i></span>
+						</div>
+						<input style="font-family: Domine, serif;" type="password" name="password" class="form-control" placeholder="Parola">
+					</div>
+
+                    <br>
+
+                    <div class="form-group">
+						<input style="font-family: Domine, serif; font-weight: bold;" type="submit" value="Giriş Yap" class="btn float-right login_btn">
+					</div>
+
+
+
+                </form>
+
+			</div>
+
+			<div class="card-footer">
+
+                <div class="d-flex justify-content-center links">
+					<a style="font-family: Domine, serif; font-weight: bold" href = "/accounts/register-intern/"><i class="fas fa-sign-in-alt"></i> Stajyer Olarak Kaydolun</a>
+                </div>
+
+                <div class="d-flex justify-content-center links">
+				    <a style="font-family: Domine, serif; font-weight: bold" href = "/accounts/register-employee/"><i class="fas fa-sign-in-alt"></i> Çalışan olarak Kaydolun</a>
+                </div>
+
+                <br>
+
+                <div class="d-flex justify-content-center links">
+				    <a style="font-family: Domine, serif; font-weight: bold" href = "/accounts/register-company/"><i class="far fa-building"></i> Şirket Kaydı Açın</a>
+                </div>
+
+                <br>
+
+
+			</div>
+
+            <br>
+            <br>
+
+              {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {{message.tags}}"  role="alert" id="messages" >
+                        <center><i class="fas fa-exclamation">  {{ message }} </i></center>
+                    </div>
+                {% endfor %}
+              {% endif %}
+
+
+        </div>
+	</div>
+</div>
+
+
+<script>
+    $('.alert').delay(3000).fadeOut('slow');
+</script>
+
+</body>
+</html>

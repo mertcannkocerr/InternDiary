@@ -1,0 +1,402 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+
+    <title>Profil</title>
+
+    <style>
+
+        body{
+            background-color: #fbeaeb!important;
+        }
+        .profile{
+            padding: 3%;
+            margin-top: 2%;
+            margin-bottom: 3%;
+            border-radius: 0.5rem;
+            background: #fff;
+        }
+        .profile-img{
+            margin-left: 14%;
+            height: 300px;
+        }
+        .profile-img img{
+            width: 80%;
+            height: 80%;
+        }
+        .profile-img .file {
+            position: relative;
+            overflow: hidden;
+            margin-top: -20%;
+            width: 70%;
+            border: none;
+            border-radius: 0;
+            font-size: 15px;
+            font-family: 'Domine', serif;
+            background: #212529b8;
+        }
+        .profile-img .file input {
+            position: absolute;
+            opacity: 0;
+            right: 0;
+            top: 0;
+        }
+
+        .profile-head h6{
+            color: #0062cc;
+        }
+
+        .profile-head .nav-tabs{
+            margin-bottom:5%;
+            margin-top: 8%;
+        }
+        .profile-head .nav-tabs .nav-link{
+            font-weight:600;
+            border: none;
+            font-size: 20px;
+        }
+        .profile-head .nav-tabs .nav-link.active{
+            border: none;
+            border-bottom:2px solid #0062cc;
+        }
+
+        .profile-work p{
+            font-size: 12px;
+            font-family: 'Domine', serif;
+            color: #818182;
+            font-weight: 600;
+            margin-top: 10%;
+        }
+        .profile-work a{
+            text-decoration: none;
+            color: #495057;
+            font-weight: 600;
+            font-size: 14px;
+            font-family: 'Domine', serif;
+        }
+        .profile-work ul{
+            list-style: none;
+        }
+        .profile-tab label{
+            font-weight: 600;
+            font-family: 'Domine', serif;
+        }
+        .profile-tab p{
+            font-weight: 600;
+            font-family: 'Domine', serif;
+            color: #0062cc;
+        }
+        .tab-content{
+            margin-top: 0px;
+        }
+        #editButton{
+            font-family: "Domine", Serif;
+            background-color: #2f3c7e;
+            color: white;
+            border-color: #2f3c7e;
+            margin-top: 0px;
+            border-radius: 50px;
+            width: 120px;
+        }
+
+        #editButton:hover{
+            background-color: #0063ed;
+
+        }
+        #editButton:focus{
+            outline: 0;
+
+        }
+
+
+</style>
+
+{% endblock %}
+
+
+{% block body %}
+    <br>
+    <br>
+
+    <div class="container">
+
+        {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {{message.tags}}"  role="alert" id="messages" >
+                        <center><i class="fas fa-exclamation">  {{ message }} </i></center>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+        {% if user.is_intern and not user.is_superuser %}
+            <div class="container profile">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="profile-img">
+                                {% if intern_user.image %}
+                                    <img  src={{ intern_user.image.url }} >
+                                {% else %}
+                                    <img src="../../../media/accounts/defaultPIC.png">
+                                {% endif %}
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="profile-head">
+                                        <h2 style=" font-size:50px; font-family: 'Domine', serif; color: #2f3c7e">
+                                            {{intern_user.user.first_name}} {{intern_user.user.last_name}}
+                                             {% if intern.user.bio != "" %}
+                                                <span title="{{intern_user.user.bio}}"><i style="font-size: 20px" class="fas fa-info-circle"></i></span>
+                                            {% else %}
+                                                <span title="Kişi Bilgisi Bulunamadı."><i style="font-size: 20px" class="fas fa-info-circle"></i></span>
+                                            {% endif %}
+
+                                        </h2>
+                                        <h6 style="font-size: 35px; font-family: 'Domine', serif;">
+                                            Stajyer
+                                        </h6>
+                                        <br>
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Kişisel Bilgiler</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">İş Bilgileri</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                           <button id="editButton" name="edit" type="button" class= "btnDelete btn-info btn-sm float-right" onclick="window.location.href = '/accounts/profile/edit';"><i class="fas fa-user-edit"></i> Düzenle</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                                <!--Bio was normally in here-->
+                        </div>
+                        <div class="col-md-8">
+                            <div class="tab-content profile-tab" id="myTabContent">
+                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Kullanıcı Adı</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p>{{ intern_user.user.username }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>E-Mail</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p>{{ intern_user.user.email}}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Şehir</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p>{{ intern_user.user.city }}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Üniversite</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p>{{ intern_user.university }}</p>
+                                                </div>
+                                            </div>
+
+                                             <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Cinsiyet</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {% if intern_user.user.gender == "Male" %}
+                                                        <p>Erkek</p>
+                                                    {% else %}
+                                                        <p>Kadın</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+
+                                </div>
+                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                             <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Şirket</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p>{{ intern_user.user.company }}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Başlama Tarihi</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p>{{ intern_user.begin_of_internship.isoformat }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Bitiş Tarihi</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p>{{ intern_user.end_of_internship.isoformat }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Toplam Çalışma Süresi</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p>{{ intern_user.worked_day_count }} iş günü</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Toplam Proje Sayısı</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p>{{ intern_user.own_projects }}</p>
+                                                </div>
+                                            </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+        {% elif not user.is_intern and not user.is_superuser %}
+            <div class="container profile">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="profile-img">
+                                {% if employee_user.image %}
+                                    <img  src={{ employee_user.image.url }} >
+                                {% else %}
+                                    <img src="../../../media/accounts/defaultPIC.png">
+                                {% endif %}
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="profile-head">
+                                        <h2 style="font-size:50px; font-family: 'Domine', serif; color: #2f3c7e">
+                                            {{employee_user.user.first_name}} {{employee_user.user.last_name}}
+                                            {% if employee_user.user.bio != "" %}
+                                                <span title="{{employee_user.user.bio}}"><i style="font-size: 20px" class="fas fa-info-circle"></i></span>
+                                            {% else %}
+                                                <span title="Kişi Bilgisi Bulunamadı."><i style="font-size: 20px" class="fas fa-info-circle"></i></span>
+                                            {% endif %}
+                                        </h2>
+                                        <h6 style="font-size:35px; font-family: 'Domine', serif;">
+                                            Çalışan
+                                        </h6>
+                                        <br>
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Kişisel Bilgiler</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">İş Bilgileri</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                           <button id="editButton" name="edit" type="button" class= "btnDelete btn-info btn-sm float-right" onclick="window.location.href = '/accounts/profile/edit';"><i class="fas fa-user-edit"></i> Düzenle</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <!-- For clear view we need column here -->
+                        </div>
+                        <div class="col-md-8">
+                            <div class="tab-content profile-tab" id="myTabContent">
+                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Kullanıcı Adı</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{ employee_user.user.username }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>E-Mail</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{ employee_user.user.email }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Şehir</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{ employee_user.user.city }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Cinsiyet</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            {% if employee_user.user.gender == "Male" %}
+                                                <p>Erkek</p>
+                                            {% else %}
+                                                <p>Kadın</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Şirket</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{ employee_user.user.company }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Verilen Proje Sayısı</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{ employee_user.created_projects }}</p>
+                                        </div>
+                                    </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        {% endif %}
+
+    </div>
+
+    <script>
+                $('#messages').delay(3000).fadeOut('slow');
+    </script>
+
+
+{% endblock%}

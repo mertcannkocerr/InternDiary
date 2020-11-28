@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    {{ form.media }}
+    <title>Düzenle</title>
+    <style>
+        html, body{
+            background-color: #fbeaeb;
+        }
+        .container{
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+
+        }
+        h2{
+            font-family: 'Domine', serif;
+            color: #2f3c7e;
+        }
+        .pageTitle{
+            margin-top: 4%;
+            margin-bottom: 4%;
+            font-family: "Domine", serif;
+            font-size: 40px;
+            font-weight: bold;
+        }
+        #submit{
+            color: #2f3c7e;
+            border-color: #2f3c7e;
+        }
+        #submit:hover{
+            background-color: #eda593;
+        }
+
+        #back{
+            float: left;
+            color: #2f3c7e;
+            border-color: #2f3c7e;
+            background-color: #fbeaeb;
+        }
+        #back:hover{
+            background-color: #eda593;
+        }
+        .ckeditor{
+            margin-left: 80px;
+
+        }
+
+    </style>
+
+    <script>
+        $('#messages').delay(3000).fadeOut('slow');
+    </script>
+
+{% endblock %}
+
+
+{% block body %}
+
+    {% if messages %}
+        <div class="alert alert-danger"  role="alert" id="messages" >
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+    <!-- For only intern users-->
+    {% if user.is_intern %}
+
+        <!--If Record is enable it should be editable -->
+        {% if record.enable %}
+            <center ><h2 class="pageTitle">Günlüğünüzü Düzenleyin</h2></center>
+            <form method="POST">
+                <div class="container">
+
+                    {% csrf_token %}
+
+                    <div class="ckeditor">
+                        {{form.as_p}}
+                    </div>
+
+                    <br>
+
+                    <button type="submit" name="submit" class="btn btn btn-lg float-right" id="submit"><i class="fas fa-save"></i> Kaydet</button>
+                    <button  name="back" type="button" class= "btn btn-danger btn-lg" id="back" onclick="window.location.href = '/diaryRecords/';"><i class="fas fa-arrow-alt-circle-left"></i> Günlüğüme Dön</button>
+
+                </div>
+
+
+
+            </form>
+
+        {% endif %}
+
+    {% else %}
+
+    {% endif %}
+
+
+{% endblock %}
+

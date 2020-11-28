@@ -1,0 +1,719 @@
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<head>
+    <title>Stajyer Kayıt</title>
+
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/navbar-top-fixed/">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Domine&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+
+    <style>
+        html, body{
+            background-color: #fbeaeb;
+        }
+
+        h2{
+            font-family: 'Domine', serif;
+            font-weight: bold;
+            font-size: 40px;
+            color: #2f3c7e;
+            margin-bottom: 5%;
+            margin-top: 8%;
+        }
+
+        .form-group{
+            font-family: "Domine", serif;
+            font-size: 15px;
+            margin-bottom: 3%;
+        }
+        .form-control {
+            border: 2px solid #2f3c7e;
+            border-radius: 5px;
+            height: 45px;
+        }
+        small{
+            opacity: 0.5;
+        }
+
+        .row{
+            margin-bottom: 3%;
+        }
+        #bio_area{
+            border: 2px solid #2f3c7e;
+            border-radius: 5px ;
+            resize: none;
+            width: 100%;
+            color: rgba(0, 0, 0, 0.7);
+        }
+         #bio_area:focus{
+            outline-color: #00a6ed;
+            outline-width: thick;
+         }
+        .selection{
+            width: 100%;
+            height: 45px;
+            background-color: white;
+            border: 2px solid #2f3c7e;
+            border-radius: 5px ;
+        }
+        .selection:focus{
+            outline: none;
+        }
+
+        label{
+            font-weight: bold;
+            color: #2f3c7e;
+            font-size: 20px;
+        }
+        .password{
+            width: 100%;
+            height: 45px;
+            border: 2px solid #2f3c7e;
+            border-radius: 5px;
+        }
+        .password:focus{
+            outline-color: #00a6ed;
+            outline-width: thick;
+        }
+
+        #buttons{
+            background-color: #fbeaeb;
+            border-color: #2f3c7e;
+            color: #2f3c7e;
+            margin-top: 3%;
+            margin-bottom: 7%;
+        }
+        #buttons:hover{
+            background-color: #eda593;
+            border-color: #2f3c7e;
+        }
+        #worked_day_count{
+            width: 100%;
+            height: 45px;
+            border: 2px solid #2f3c7e;
+            border-radius: 5px;
+        }
+        #worked_day_count{
+            outline-color: #00a6ed;
+            outline-width: thick;
+        }
+        input{
+            padding: 5px;
+        }
+
+        select{
+            padding: 5px;
+        }
+        textarea{
+            padding: 5px;
+        }
+        .custom-combobox {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+
+        }
+        .custom-combobox-toggle {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          margin-left: -1px;
+          padding: 0;
+          background-color: white;
+          width: 10px;
+
+        }
+        .custom-combobox-input {
+          margin: 0;
+          padding: 5px 10px;
+          width: 99%;
+          height: 45px;
+          border-radius: 5px;
+        outline-color: #ae0700;
+          background-color: white;
+          border: 10px solid #2f3c7e;
+          font-family: "Domine", serif;
+        }
+
+
+        .ui-widget {
+          text-align: left;
+          font-family: "Domine", Serif;
+        }
+
+
+        .ui-widget:focus {
+          outline-color: #00a6ed;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+        <h2><center>Stajyer Kayıt</center></h2>
+        <br>
+        <br>
+        <form method ="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="container">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {{message.tags}}"  role="alert" id="messages" >
+                        <center><i class="fas fa-exclamation">  {{ message }} </i></center>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+
+
+            <div class="form-group">
+                <label>Kullanıcı Adı</label>
+                <input type="text" id="username" name="username" class="form-control input-sm" autocomplete="off" required>
+                <small>Kullanıcı adınız 150 karakterden az ve size özel olmalıdır. Sadece harf, rakam ve @/./+/-/_ sembollerini içerebilir.</small>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <label>Ad</label>
+                        <input type="text" id="first_name" name="first_name" class="form-control input-sm" autocomplete="off" required>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <label>Soyad</label>
+                        <input type="text" id="last_name"  name="last_name" class="form-control input-sm" autocomplete="off" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>E-Mail</label>
+                <input type="email" id="email" name="email" class="form-control input-sm" autocomplete="off" required>
+            </div>
+
+            <div class="form-group">
+                <label>Hakkınızda</label>
+                <textarea id="bio_area" name="bio" rows="5" maxlength="500" ></textarea>
+                <small>Kendiniz hakkında 500 karakter ile sınırlı bir bilgilendirme yazısı yazabilirsiniz.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Şehir</label>
+                <select class="selection" name="city" required>
+                    <option value="Adana">Adana</option>
+                    <option value="Adıyaman">Adıyaman</option>
+                    <option value="Afyonkarahisar">Afyonkarahisar</option>
+                    <option value="Ağrı">Ağrı</option>
+                    <option value="Amasya">Amasya</option>
+                    <option value="Ankara">Ankara</option>
+                    <option value="Antalya">Antalya</option>
+                    <option value="Artvin">Artvin</option>
+                    <option value="Aydın">Aydın</option>
+                    <option value="Balıkesir">Balıkesir</option>
+                    <option value="Bilecik">Bilecik</option>
+                    <option value="Bingöl">Bingöl</option>
+                    <option value="Bitlis">Bitlis</option>
+                    <option value="Bolu">Bolu</option>
+                    <option value="Burdur">Burdur</option>
+                    <option value="Bursa">Bursa</option>
+                    <option value="Çanakkale">Çanakkale</option>
+                    <option value="Çankırı">Çankırı</option>
+                    <option value="Çorum">Çorum</option>
+                    <option value="Denizli">Denizli</option>
+                    <option value="Diyarbakır">Diyarbakır</option>
+                    <option value="Edirne">Edirne</option>
+                    <option value="Elazığ">Elazığ</option>
+                    <option value="Erzincan">Erzincan</option>
+                    <option value="Erzurum">Erzurum</option>
+                    <option value="Eskişehir">Eskişehir</option>
+                    <option value="Gaziantep">Gaziantep</option>
+                    <option value="Giresun">Giresun</option>
+                    <option value="Gümüşhane">Gümüşhane</option>
+                    <option value="Hakkâri">Hakkâri</option>
+                    <option value="Hatay">Hatay</option>
+                    <option value="Isparta">Isparta</option>
+                    <option value="Mersin">Mersin</option>
+                    <option value="İstanbul">İstanbul</option>
+                    <option value="İzmir">İzmir</option>
+                    <option value="Kars">Kars</option>
+                    <option value="Kastamonu">Kastamonu</option>
+                    <option value="Kayseri">Kayseri</option>
+                    <option value="Kırklareli">Kırklareli</option>
+                    <option value="Kırşehir">Kırşehir</option>
+                    <option value="Kocaeli">Kocaeli</option>
+                    <option value="Konya">Konya</option>
+                    <option value="Kütahya">Kütahya</option>
+                    <option value="Malatya">Malatya</option>
+                    <option value="Manisa">Manisa</option>
+                    <option value="Kahramanmaraş">Kahramanmaraş</option>
+                    <option value="Mardin">Mardin</option>
+                    <option value="Muğla">Muğla</option>
+                    <option value="Muş">Muş</option>
+                    <option value="Nevşehir">Nevşehir</option>
+                    <option value="Niğde">Niğde</option>
+                    <option value="Ordu">Ordu</option>
+                    <option value="Rize">Rize</option>
+                    <option value="Sakarya">Sakarya</option>
+                    <option value="Samsun">Samsun</option>
+                    <option value="Siirt">Siirt</option>
+                    <option value="Sinop">Sinop</option>
+                    <option value="Sivas">Sivas</option>
+                    <option value="Tekirdağ">Tekirdağ</option>
+                    <option value="Tokat">Tokat</option>
+                    <option value="Trabzon">Trabzon</option>
+                    <option value="Tunceli">Tunceli</option>
+                    <option value="Şanlıurfa">Şanlıurfa</option>
+                    <option value="Uşak">Uşak</option>
+                    <option value="Van">Van</option>
+                    <option value="Yozgat">Yozgat</option>
+                    <option value="Zonguldak">Zonguldak</option>
+                    <option value="Aksaray">Aksaray</option>
+                    <option value="Bayburt">Bayburt</option>
+                    <option value="Karaman">Karaman</option>
+                    <option value="Kırıkkale">Kırıkkale</option>
+                    <option value="Batman">Batman</option>
+                    <option value="Şırnak">Şırnak</option>
+                    <option value="Bartın">Bartın</option>
+                    <option value="Ardahan">Ardahan</option>
+                    <option value="Iğdır">Iğdır</option>
+                    <option value="Yalova">Yalova</option>
+                    <option value="Karabük">Karabük</option>
+                    <option value="Kilis">Kilis</option>
+                    <option value="Osmaniye">Osmaniye</option>
+                    <option value="Düzce">Düzce</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Üniversite</label>
+                <select id="university" value="university" name="university" class="selection" required>
+                    <option value="Abant İzzet Baysal Üniversitesi">Abant İzzet Baysal Üniversitesi</option>
+                    <option value="Abdullah Gül Üniversitesi">Abdullah Gül Üniversitesi</option>
+                    <option value="Acıbadem Üniversitesi">Acıbadem Üniversitesi</option>
+                    <option value="Adana Bilim ve Teknoloji Üniversitesi">Adana Bilim ve Teknoloji Üniversitesi</option>
+                    <option value="Adnan Menderes Üniversitesi">Adnan Menderes Üniversitesi</option>
+                    <option value="Adıyaman Üniversitesi">Adıyaman Üniversitesi</option>
+                    <option value="Afyon Kocatepe Üniversitesi">Afyon Kocatepe Üniversitesi</option>
+                    <option value="Ahi Evran Üniversitesi">Ahi Evran Üniversitesi</option>
+                    <option value="Akdeniz Üniversitesi">Akdeniz Üniversitesi</option>
+                    <option value="Akev Üniversitesi">Akev Üniversitesi</option>
+                    <option value="Aksaray Üniversitesi">Aksaray Üniversitesi</option>
+                    <option value="Alanya Alaaddin Keykubat Üniversitesi">Alanya Alaaddin Keykubat Üniversitesi</option>
+                    <option value="Alanya Hamdullah Emin Paşa Üniversitesi">Alanya Hamdullah Emin Paşa Üniversitesi</option>
+                    <option value="Amasya Üniversitesi">Amasya Üniversitesi</option>
+                    <option value="Anadolu Üniversitesi">Anadolu Üniversitesi</option>
+                    <option value="Anka Teknoloji Üniversitesi">Anka Teknoloji Üniversitesi</option>
+                    <option value="Ankara Sosyal Bilimler Üniversitesi">Ankara Sosyal Bilimler Üniversitesi</option>
+                    <option value="Ankara Üniversitesi">Ankara Üniversitesi</option>
+                    <option value="Ardahan Üniversitesi">Ardahan Üniversitesi</option>
+                    <option value="Artvin Çoruh Üniversitesi">Artvin Çoruh Üniversitesi</option>
+                    <option value="Atatürk Üniversitesi">Atatürk Üniversitesi</option>
+                    <option value="Atılım Üniversitesi">Atılım Üniversitesi</option>
+                    <option value="Avrasya Üniversitesi">Avrasya Üniversitesi</option>
+                    <option value="Ağrı İbrahim Çeçen Üniversitesi">Ağrı İbrahim Çeçen Üniversitesi</option>
+                    <option value="Bahçeşehir Üniversitesi">Bahçeşehir Üniversitesi</option>
+                    <option value="Balıkesir Üniversitesi">Balıkesir Üniversitesi</option>
+                    <option value="Bandırma Onyedi Eylül Üniversitesi">Bandırma Onyedi Eylül Üniversitesi</option>
+                    <option value="Bartın Üniversitesi">Bartın Üniversitesi</option>
+                    <option value="Batman Üniversitesi">Batman Üniversitesi</option>
+                    <option value="Bayburt Üniversitesi">Bayburt Üniversitesi</option>
+                    <option value="Başkent Üniversitesi">Başkent Üniversitesi</option>
+                    <option value="Beykent Üniversitesi">Beykent Üniversitesi</option>
+                    <option value="Bezmiâlem Vakıf Üniversitesi">Bezmiâlem Vakıf Üniversitesi</option>
+                    <option value="Bilecik Şeyh Edebali Üniversitesi">Bilecik Şeyh Edebali Üniversitesi</option>
+                    <option value="Bilkent Üniversitesi">Bilkent Üniversitesi</option>
+                    <option value="Bingöl Üniversitesi">Bingöl Üniversitesi</option>
+                    <option value="Biruni Üniversitesi">Biruni Üniversitesi</option>
+                    <option value="Bitlis Eren Üniversitesi">Bitlis Eren Üniversitesi</option>
+                    <option value="Bozok Üniversitesi">Bozok Üniversitesi</option>
+                    <option value="Boğaziçi Üniversitesi">Boğaziçi Üniversitesi</option>
+                    <option value="Bursa Orhangazi Üniversitesi">Bursa Orhangazi Üniversitesi</option>
+                    <option value="Bursa Teknik Üniversitesi">Bursa Teknik Üniversitesi</option>
+                    <option value="Bülent Ecevit Üniversitesi">Bülent Ecevit Üniversitesi</option>
+                    <option value="Canik Başarı Üniversitesi">Canik Başarı Üniversitesi</option>
+                    <option value="Celal Bayar Üniversitesi">Celal Bayar Üniversitesi</option>
+                    <option value="Cumhuriyet Üniversitesi">Cumhuriyet Üniversitesi</option>
+                    <option value="Çanakkale Onsekiz Mart Üniversitesi">Çanakkale Onsekiz Mart Üniversitesi</option>
+                    <option value="Çankaya Üniversitesi">Çankaya Üniversitesi</option>
+                    <option value="Çankırı Karatekin Üniversitesi">Çankırı Karatekin Üniversitesi</option>
+                    <option value="Çağ Üniversitesi">Çağ Üniversitesi</option>
+                    <option value="Çukurova Üniversitesi">Çukurova Üniversitesi</option>
+                    <option value="Deniz Harp Okulu">Deniz Harp Okulu</option>
+                    <option value="Dicle Üniversitesi">Dicle Üniversitesi</option>
+                    <option value="Dokuz Eylül Üniversitesi">Dokuz Eylül Üniversitesi</option>
+                    <option value="Doğuş Üniversitesi">Doğuş Üniversitesi</option>
+                    <option value="Dumlupınar Üniversitesi">Dumlupınar Üniversitesi</option>
+                    <option value="Düzce Üniversitesi">Düzce Üniversitesi</option>
+                    <option value="Ege Üniversitesi">Ege Üniversitesi</option>
+                    <option value="Erciyes Üniversitesi">Erciyes Üniversitesi</option>
+                    <option value="Erzincan Üniversitesi">Erzincan Üniversitesi</option>
+                    <option value="Erzurum Teknik Üniversitesi">Erzurum Teknik Üniversitesi</option>
+                    <option value="Eskişehir Osmangazi Üniversitesi">Eskişehir Osmangazi Üniversitesi</option>
+                    <option value="Fatih Sultan Mehmet Üniversitesi">Fatih Sultan Mehmet Üniversitesi</option>
+                    <option value="Fatih Üniversitesi">Fatih Üniversitesi</option>
+                    <option value="Fırat Üniversitesi">Fırat Üniversitesi</option>
+                    <option value="Galatasaray Üniversitesi">Galatasaray Üniversitesi</option>
+                    <option value="Gazi Üniversitesi">Gazi Üniversitesi</option>
+                    <option value="Gaziantep Üniversitesi">Gaziantep Üniversitesi</option>
+                    <option value="Gaziosmanpaşa Üniversitesi">Gaziosmanpaşa Üniversitesi</option>
+                    <option value="Gebze Teknik Üniversitesi">Gebze Teknik Üniversitesi</option>
+                    <option value="Gedik Üniversitesi">Gedik Üniversitesi</option>
+                    <option value="Gediz Üniversitesi">Gediz Üniversitesi</option>
+                    <option value="Giresun Üniversitesi">Giresun Üniversitesi</option>
+                    <option value="Gülhane Askeri Tıp Akademisi">Gülhane Askeri Tıp Akademisi</option>
+                    <option value="Gümüşhane Üniversitesi">Gümüşhane Üniversitesi</option>
+                    <option value="Hacettepe Üniversitesi">Hacettepe Üniversitesi</option>
+                    <option value="Hakkari Üniversitesi">Hakkari Üniversitesi</option>
+                    <option value="Haliç Üniversitesi">Haliç Üniversitesi</option>
+                    <option value="Harran Üniversitesi">Harran Üniversitesi</option>
+                    <option value="Hasan Kalyoncu Üniversitesi">Hasan Kalyoncu Üniversitesi</option>
+                    <option value="Hava Harp Okulu">Hava Harp Okulu</option>
+                    <option value="Hitit Üniversitesi">Hitit Üniversitesi</option>
+                    <option value="Iğdır Üniversitesi">Iğdır Üniversitesi</option>
+                    <option value="Işık Üniversitesi">Işık Üniversitesi</option>
+                    <option value="Kadir Has Üniversitesi">Kadir Has Üniversitesi</option>
+                    <option value="Kafkas Üniversitesi">Kafkas Üniversitesi</option>
+                    <option value="Kahramanmaraş Sütçü İmam Üniversitesi">Kahramanmaraş Sütçü İmam Üniversitesi</option>
+                    <option value="Kanuni Üniversitesi">Kanuni Üniversitesi</option>
+                    <option value="Kara Harp Okulu">Kara Harp Okulu</option>
+                    <option value="Karabük Üniversitesi">Karabük Üniversitesi</option>
+                    <option value="Karadeniz Teknik Üniversitesi">Karadeniz Teknik Üniversitesi</option>
+                    <option value="Karamanoğlu Mehmetbey Üniversitesi">Karamanoğlu Mehmetbey Üniversitesi</option>
+                    <option value="Karatay Üniversitesi">Karatay Üniversitesi</option>
+                    <option value="Kastamonu Üniversitesi">Kastamonu Üniversitesi</option>
+                    <option value="Kilis 7 Aralık Üniversitesi">Kilis 7 Aralık Üniversitesi</option>
+                    <option value="Kocaeli Üniversitesi">Kocaeli Üniversitesi</option>
+                    <option value="Konya Gıda Tarım Üniversitesi">Konya Gıda Tarım Üniversitesi</option>
+                    <option value="Koç Üniversitesi">Koç Üniversitesi</option>
+                    <option value="Kırklareli Üniversitesi">Kırklareli Üniversitesi</option>
+                    <option value="Kırıkkale Üniversitesi">Kırıkkale Üniversitesi</option>
+                    <option value="MEF Üniversitesi">MEF Üniversitesi</option>
+                    <option value="Maltepe Üniversitesi">Maltepe Üniversitesi</option>
+                    <option value="Mardin Artuklu Üniversitesi">Mardin Artuklu Üniversitesi</option>
+                    <option value="Marmara Üniversitesi">Marmara Üniversitesi</option>
+                    <option value="Mehmet Akif Ersoy Üniversitesi">Mehmet Akif Ersoy Üniversitesi</option>
+                    <option value="Melikşah Üniversitesi">Melikşah Üniversitesi</option>
+                    <option value="Mersin Üniversitesi">Mersin Üniversitesi</option>
+                    <option value="Mevlana Üniversitesi">Mevlana Üniversitesi</option>
+                    <option value="Mimar Sinan Güzel Sanatlar Üniversitesi">Mimar Sinan Güzel Sanatlar Üniversitesi</option>
+                    <option value="Murat Hüdavendigar Üniversitesi">Murat Hüdavendigar Üniversitesi</option>
+                    <option value="Mustafa Kemal Üniversitesi">Mustafa Kemal Üniversitesi</option>
+                    <option value="Muğla Sıtkı Koçman Üniversitesi">Muğla Sıtkı Koçman Üniversitesi</option>
+                    <option value="Muş Alparslan Üniversitesi">Muş Alparslan Üniversitesi</option>
+                    <option value="Namık Kemal Üniversitesi">Namık Kemal Üniversitesi</option>
+                    <option value="Necmettin Erbakan Üniversitesi**">Necmettin Erbakan Üniversitesi**</option>
+                    <option value="Nevşehir Hacı Bektaş Veli Üniversitesi">Nevşehir Hacı Bektaş Veli Üniversitesi</option>
+                    <option value="Niğde Üniversitesi">Niğde Üniversitesi</option>
+                    <option value="Nişantaşı Üniversitesi">Nişantaşı Üniversitesi</option>
+                    <option value="Nuh Naci Yazgan Üniversitesi">Nuh Naci Yazgan Üniversitesi</option>
+                    <option value="İbn-u Haldun Üniversitesi">İbn-u Haldun Üniversitesi</option>
+                    <option value="İnönü Üniversitesi">İnönü Üniversitesi</option>
+                    <option value="İpek Üniversitesi**">İpek Üniversitesi**</option>
+                    <option value="İskenderun Teknik Üniversitesi">İskenderun Teknik Üniversitesi</option>
+                    <option value="İstanbul 29 Mayıs Üniversitesi">İstanbul 29 Mayıs Üniversitesi</option>
+                    <option value="İstanbul Arel Üniversitesi">İstanbul Arel Üniversitesi</option>
+                    <option value="İstanbul Aydın Üniversitesi">İstanbul Aydın Üniversitesi</option>
+                    <option value="İstanbul Bilgi Üniversitesi">İstanbul Bilgi Üniversitesi</option>
+                    <option value="İstanbul Bilim Üniversitesi">İstanbul Bilim Üniversitesi</option>
+                    <option value="İstanbul Esenyurt Üniversitesi">İstanbul Esenyurt Üniversitesi</option>
+                    <option value="İstanbul Gelişim Üniversitesi">İstanbul Gelişim Üniversitesi</option>
+                    <option value="İstanbul Kemerburgaz Üniversitesi">İstanbul Kemerburgaz Üniversitesi</option>
+                    <option value="İstanbul Kültür Üniversitesi">İstanbul Kültür Üniversitesi</option>
+                    <option value="İstanbul Medeniyet Üniversitesi">İstanbul Medeniyet Üniversitesi</option>
+                    <option value="İstanbul Medipol Üniversitesi">İstanbul Medipol Üniversitesi</option>
+                    <option value="İstanbul Rumeli Üniversitesi">İstanbul Rumeli Üniversitesi</option>
+                    <option value="İstanbul Sabahattin Zaim Üniversitesi">İstanbul Sabahattin Zaim Üniversitesi</option>
+                    <option value="İstanbul Teknik Üniversitesi">İstanbul Teknik Üniversitesi</option>
+                    <option value="İstanbul Ticaret Üniversitesi">İstanbul Ticaret Üniversitesi</option>
+                    <option value="İstanbul Üniversitesi">İstanbul Üniversitesi</option>
+                    <option value="İstanbul Şehir Üniversitesi">İstanbul Şehir Üniversitesi</option>
+                    <option value="İstinye Üniversitesi">İstinye Üniversitesi</option>
+                    <option value="İzmir Ekonomi Üniversitesi">İzmir Ekonomi Üniversitesi</option>
+                    <option value="İzmir Kâtip Çelebi Üniversitesi">İzmir Kâtip Çelebi Üniversitesi</option>
+                    <option value="İzmir Yüksek Teknoloji Enstitüsü">İzmir Yüksek Teknoloji Enstitüsü</option>
+                    <option value="İzmir Üniversitesi">İzmir Üniversitesi</option>
+                    <option value="Okan Üniversitesi">Okan Üniversitesi</option>
+                    <option value="Ondokuz Mayıs Üniversitesi">Ondokuz Mayıs Üniversitesi</option>
+                    <option value="Ordu Üniversitesi">Ordu Üniversitesi</option>
+                    <option value="Orta Doğu Teknik Üniversitesi">Orta Doğu Teknik Üniversitesi</option>
+                    <option value="Osmaniye Korkut Ata Üniversitesi">Osmaniye Korkut Ata Üniversitesi</option>
+                    <option value="Özyeğin Üniversitesi">Özyeğin Üniversitesi</option>
+                    <option value="Pamukkale Üniversitesi">Pamukkale Üniversitesi</option>
+                    <option value="Piri Reis Üniversitesi">Piri Reis Üniversitesi</option>
+                    <option value="Polis Akademisi">Polis Akademisi</option>
+                    <option value="Recep Tayyip Erdoğan Üniversitesi">Recep Tayyip Erdoğan Üniversitesi</option>
+                    <option value="Sabancı Üniversitesi">Sabancı Üniversitesi</option>
+                    <option value="Sakarya Üniversitesi">Sakarya Üniversitesi</option>
+                    <option value="Sanko Üniversitesi">Sanko Üniversitesi</option>
+                    <option value="Sağlık Bilimleri Üniversitesi">Sağlık Bilimleri Üniversitesi</option>
+                    <option value="Selahattin Eyyubi Üniversitesi">Selahattin Eyyubi Üniversitesi</option>
+                    <option value="Selçuk Üniversitesi">Selçuk Üniversitesi</option>
+                    <option value="Siirt Üniversitesi">Siirt Üniversitesi</option>
+                    <option value="Sinop Üniversitesi">Sinop Üniversitesi</option>
+                    <option value="Süleyman Demirel Üniversitesi">Süleyman Demirel Üniversitesi</option>
+                    <option value="Süleyman Şah Üniversitesi">Süleyman Şah Üniversitesi</option>
+                    <option value="Şifa Üniversitesi">Şifa Üniversitesi</option>
+                    <option value="Şırnak Üniversitesi">Şırnak Üniversitesi</option>
+                    <option value="TED Üniversitesi">TED Üniversitesi</option>
+                    <option value="TOBB Ekonomi ve Teknoloji Üniversitesi">TOBB Ekonomi ve Teknoloji Üniversitesi</option>
+                    <option value="Toros Üniversitesi">Toros Üniversitesi</option>
+                    <option value="Trakya Üniversitesi">Trakya Üniversitesi</option>
+                    <option value="Tunceli Üniversitesi">Tunceli Üniversitesi</option>
+                    <option value="Turgut Özal Üniversitesi">Turgut Özal Üniversitesi</option>
+                    <option value="Türk Alman Üniversitesi">Türk Alman Üniversitesi</option>
+                    <option value="Türk Hava Kurumu Üniversitesi">Türk Hava Kurumu Üniversitesi</option>
+                    <option value="Türkiye Uluslararası İslam, Bilim ve Teknoloji Üniversitesi">Türkiye Uluslararası İslam, Bilim ve Teknoloji Üniversitesi</option>
+                    <option value="Ufuk Üniversitesi">Ufuk Üniversitesi</option>
+                    <option value="Uludağ Üniversitesi">Uludağ Üniversitesi</option>
+                    <option value="Uluslararası Antalya Üniversitesi">Uluslararası Antalya Üniversitesi</option>
+                    <option value="Uşak Üniversitesi">Uşak Üniversitesi</option>
+                    <option value="Üsküdar Üniversitesi">Üsküdar Üniversitesi</option>
+                    <option value="Yalova Üniversitesi">Yalova Üniversitesi</option>
+                    <option value="Yaşar Üniversitesi">Yaşar Üniversitesi</option>
+                    <option value="Yeditepe Üniversitesi">Yeditepe Üniversitesi</option>
+                    <option value="Yeni Yüzyıl Üniversitesi">Yeni Yüzyıl Üniversitesi</option>
+                    <option value="Yüksek İhtisas Üniversitesi**">Yüksek İhtisas Üniversitesi**</option>
+                    <option value="Yüzüncü Yıl Üniversitesi">Yüzüncü Yıl Üniversitesi</option>
+                    <option value="Yıldırım Beyazıt Üniversitesi">Yıldırım Beyazıt Üniversitesi</option>
+                    <option value="Yıldız Teknik Üniversitesi">Yıldız Teknik Üniversitesi</option>
+                    <option value="Zirve Üniversitesi">Zirve Üniversitesi</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                  <label>Cinsiyet</label>
+                  <select class="selection" id ="gender" name="gender" required>
+                          <option selected="selected" value="Female">Kadın</option>
+                          <option value="Male">Erkek</option>
+                  </select>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                     <div class="form-group">
+                        <label>Parola</label>
+                        <input class="password" type="password" name="password1" autocomplete="off" required>
+                     </div>
+
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <label>Parola Tekrarı</label>
+                        <input class="password" type="password" name="password2" autocomplete="off" required>
+                    </div>
+                </div>
+                <small style="margin-left: 1%">Parolanız kişisel bilgilerinize benzememeli, en az 8 karakter olmalıdır. Ayrıca tamamiyle
+                sayılardan oluşmamalı ve kolay tahmin edilebilir olmamalıdır.</small>
+
+            </div>
+
+
+
+            <div class="form-group">
+            <label>Şirket</label>
+                    <div class="ui-widget" >
+
+                        <select value="company" id="combobox" class="form-control input-sm" name="company"  required>
+                        {% for company in all_companies %}
+                              <option value="{{ company.id }}"> {{ company }}</option>
+                          {% endfor %}
+                        </select>
+                    </div>
+            </div>
+
+
+            <div class="form-group">
+                <label>Şirket Parolası</label>
+                <input class="password" type="password" name="company_password" autocomplete="off" required>
+                <small>Bu Alanda Şirketiniz Tarafından Size Sağlanan Parolayı Girmeniz Gerekmektedir.</small>
+            </div>
+
+
+            <div class="form-group">
+                <label>Staj Süresi</label>
+                <input id="worked_day_count" value="1" name="worked_day_count" type="number" min="1" required>
+                <small>Lütfen çalışacağınız süreyi gün olarak giriniz ve doğru değeri girdiğinizden emin olunuz. Bu alan tekrardan düzenlenemez.</small>
+            </div>
+
+
+            <div class="form-group">
+                <label>Profil Fotoğrafı</label><br>
+                <input id="image" value="image" name="image" type="file">
+            </div>
+
+        <button id="buttons" type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-user-plus"></i> Kayıt Ol</button>
+        <button id="buttons"  name="back" type="button" class= "btn btn-danger btn-lg" id="back" onclick="window.location.href = '/accounts/login';"><i class="fas fa-arrow-alt-circle-left"></i> Giriş Yap</button>
+
+        </div>
+
+
+        </form>
+
+    <script>
+                $('#messages').delay(3000).fadeOut('slow');
+    </script>
+
+    <script>
+        $( function() {
+          $.widget( "custom.combobox", {
+            _create: function() {
+              this.wrapper = $( "<span>" )
+                .addClass( "custom-combobox" )
+                .insertAfter( this.element );
+
+              this.element.hide();
+              this._createAutocomplete();
+              this._createShowAllButton();
+            },
+
+            _createAutocomplete: function() {
+              var selected = this.element.children( ":selected" ),
+                value = selected.val() ? selected.text() : "";
+
+              this.input = $( "<input>" )
+                .appendTo( this.wrapper )
+                .val( value )
+                .attr( "title", "" )
+                .addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
+                .autocomplete({
+                  delay: 0,
+                  minLength: 0,
+                  source: $.proxy( this, "_source" )
+                })
+                .tooltip({
+                  classes: {
+                    "ui-tooltip": "ui-state-highlight"
+                  }
+                });
+
+              this._on( this.input, {
+                autocompleteselect: function( event, ui ) {
+                  ui.item.option.selected = true;
+                  this._trigger( "select", event, {
+                    item: ui.item.option
+                  });
+                },
+
+                autocompletechange: "_removeIfInvalid"
+              });
+            },
+
+            _createShowAllButton: function() {
+              var input = this.input,
+                wasOpen = false;
+
+              $( "<a>" )
+                .attr( "tabIndex", -1 )
+                .attr( "title", "Show All Items" )
+                .tooltip()
+                .appendTo( this.wrapper )
+                .button({
+                  icons: {
+                    primary: "ui-icon-triangle-1-s"
+                  },
+                  text: false
+                })
+                .removeClass( "ui-corner-all" )
+                .addClass( "custom-combobox-toggle ui-corner-right" )
+                .on( "mousedown", function() {
+                  wasOpen = input.autocomplete( "widget" ).is( ":visible" );
+                })
+                .on( "click", function() {
+                  input.trigger( "focus" );
+
+                  // Close if already visible
+                  if ( wasOpen ) {
+                    return;
+                  }
+
+                  // Pass empty string as value to search for, displaying all results
+                  input.autocomplete( "search", "" );
+                });
+            },
+
+            _source: function( request, response ) {
+              var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+              response( this.element.children( "option" ).map(function() {
+                var text = $( this ).text();
+                if ( this.value && ( !request.term || matcher.test(text) ) )
+                  return {
+                    label: text,
+                    value: text,
+                    option: this
+                  };
+              }) );
+            },
+
+            _removeIfInvalid: function( event, ui ) {
+
+              // Selected an item, nothing to do
+              if ( ui.item ) {
+                return;
+              }
+
+              // Search for a match (case-insensitive)
+              var value = this.input.val(),
+                valueLowerCase = value.toLowerCase(),
+                valid = false;
+              this.element.children( "option" ).each(function() {
+                if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+                  this.selected = valid = true;
+                  return false;
+                }
+              });
+
+              // Found a match, nothing to do
+              if ( valid ) {
+                return;
+              }
+
+              // Remove invalid value
+              this.input
+                .val( "" )
+                .attr( "title", value + " didn't match any item" )
+                .tooltip( "open" );
+              this.element.val( "" );
+              this._delay(function() {
+                this.input.tooltip( "close" ).attr( "title", "" );
+              }, 2500 );
+              this.input.autocomplete( "instance" ).term = "";
+            },
+
+            _destroy: function() {
+              this.wrapper.remove();
+              this.element.show();
+            }
+          });
+
+          $( "#combobox" ).combobox();
+          $( "#toggle" ).on( "click", function() {
+            $( "#combobox" ).toggle();
+          });
+        } );
+    </script>
+
+</body>
+
+
+</html>

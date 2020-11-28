@@ -1,0 +1,407 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block head %}
+    {{ form.media }}
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300i,400" rel="stylesheet">
+
+    <title>Günlük</title>
+
+    <style>
+
+        body,head {
+            background-color: #fbeaeb;
+        }
+
+        #contentOfRecord{
+            margin-bottom: 10px;
+            margin-left: 100px;
+        }
+
+        #accordion .ui-widget-content{
+            background: #ffd1ce;
+            font-size: 20px !important;
+            font-family: 'Domine', serif;
+
+
+        }
+
+        #accordion .ui-accordion-header{
+          background-image:none;
+          background-color:#333;
+          color:#fff;
+          font-size: 20px !important;
+          font-family: 'Domine', serif;
+        }
+
+        #pageTitleIntern{
+            color: #2f3c7e;
+            margin-top: 50px;
+            margin-bottom: 100px;
+            font-size: 40px !important;
+            font-family: 'Domine', serif;
+        }
+
+        #buttonEdit{
+            background-color: #2f3c7e;
+            color: white;
+            border-color: #2f3c7e;
+            margin-top: 50px;
+        }
+
+        #buttonEdit:hover{
+            background-color: #0746ed;
+
+        }
+        #buttonEdit:disabled,
+        #buttonEdit[disabled]{
+          border: 1px solid #2f3c7e;
+          background-color: #2f3c7e;
+          color: grey;
+        }
+
+        .emp-profile{
+            padding: 3%;
+            margin-top: 2%;
+            margin-bottom: 3%;
+            border-radius: 0.5rem;
+            background: #fff;
+        }
+        .profile-img{
+            margin-left: 14%;
+            height: 300px;
+        }
+        .profile-img img{
+            width: 80%;
+            height: 80%;
+            border-radius: 15px;
+        }
+        .profile-img .file {
+            position: relative;
+            overflow: hidden;
+            margin-top: -20%;
+            width: 70%;
+            border: none;
+            border-radius: 0;
+            font-size: 15px;
+            font-family: 'Domine', serif;
+            background: #212529b8;
+        }
+        .profile-img .file input {
+            position: absolute;
+            opacity: 0;
+            right: 0;
+            top: 0;
+        }
+
+        .profile-head h6{
+            color: #0062cc;
+        }
+
+
+        .proile-rating span{
+            color: #495057;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: 'Domine', serif;
+        }
+        .profile-head .nav-tabs{
+            margin-top: 8%;
+            margin-bottom:5%;
+        }
+        .profile-head .nav-tabs .nav-link{
+            font-weight:600;
+            font-size: 20px;
+            border: none;
+
+        }
+        .profile-head .nav-tabs .nav-link.active{
+            border: none;
+            border-bottom:2px solid #0062cc;
+
+        }
+
+        .profile-work{
+        padding: 14%;
+        margin-top: -22%;
+}
+
+        .profile-work p{
+            font-size: 12px;
+            font-family: 'Domine', serif;
+            color: #818182;
+            font-weight: 600;
+            margin-top: 10%;
+        }
+        .profile-work a{
+            text-decoration: none;
+            color: #495057;
+            font-weight: 600;
+            font-size: 14px;
+            font-family: 'Domine', serif;
+        }
+        .profile-work ul{
+            list-style: none;
+        }
+        .profile-tab label{
+            font-weight: 600;
+            font-family: 'Domine', serif;
+        }
+        .profile-tab p{
+            font-weight: 600;
+            font-family: 'Domine', serif;
+            color: #0062cc;
+        }
+        .tab-content{
+            margin-top: 0px;
+        }
+        a:hover{
+            color: #2f3c7e;
+        }
+        a{
+            color: #2f3c7e;
+        }
+        #pageTitleIntern{
+            font-weight: bold;
+            font-family: "Domine", serif;
+            font-size: 40px;
+            margin-top: 10%;
+            margin-bottom: 10%;
+        }
+
+    </style>
+
+
+
+{% endblock %}
+
+
+{% block body %}
+
+    <!-- If user is intern perform this template -->
+
+    {% if user.is_intern and not user.is_superuser %}
+        <div class="container" id="internContainer">
+                <center><h2 id="pageTitleIntern">Günlük Kayıtlarınız</h2></center>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {{message.tags}}"  role="alert" id="messages" >
+                        <center><i class="fas fa-exclamation">  {{ message }} </i></center>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div id="accordion">
+                {% for record in Working_Day_Records %}
+                    <h3>{{ record.date.isoformat }}</h3>
+                    <div>
+                        <br>
+                       <p id="contentOfRecord">
+                        {% if record.text == "" %}
+                            <br>
+                            <strong><i><center>Bugüne ait herhangi bir kayıt bulunamadı.</center></i></strong>
+                            <br>
+                        {% endif %}
+                           {{record.text|safe}}
+
+                       </p>
+
+                        {% if record.date < today %}
+                            <button id="buttonEdit" disabled name="edit" type="button" class= "btn btn-info btn-lg float-right" id="back" onclick="window.location.href = '/diaryRecords/{{ record.id }}/';">Düzenle</button>
+                        {% else %}
+                            <button id="buttonEdit" name="edit" type="button" class= "btn btn-info btn-lg float-right" id="back" onclick="window.location.href = '/diaryRecords/{{ record.id }}/';">Düzenle</button>
+                        {% endif %}
+
+
+
+                     </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+
+
+
+ <!-- If user is employee, then perform this template -->
+
+
+    {% elif not user.is_intern and not user.is_superuser %}
+
+            <center class="title">
+                <h2 style=" font-weight:bold; font-family: 'Domine', serif; color: #2f3c7e; margin: 5%;font-size: 35px;">
+                    Lütfen Kaydını Görmek İstediğiniz Stajyerin<br>İsmine Tıklayınız
+                </h2>
+            </center>
+
+        {% for intern in all_interns %}
+            <div class="container emp-profile">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="/diaryRecords/selected_intern/{{ intern.id }}">
+                        <div class="profile-img">
+                            {% if intern.image %}
+                                <img  src={{ intern.image.url }} >
+                            {% else %}
+                                <img src="../../../media/accounts/defaultPIC.png">
+                            {% endif %}
+
+                        </div>
+                        </a>
+                    </div>
+                    <div class="col-md-6" >
+                        <div class="profile-head">
+                                    <h2 style="font-size: 50px; font-family: 'Domine', serif; color: #2f3c7e">
+                                        <a style="text-decoration: none;" href="/diaryRecords/selected_intern/{{ intern.id }}">{{intern.user.first_name}} {{intern.user.last_name}}</a>
+                                         {% if intern.user.bio != "" %}
+                                            <span title="{{intern.user.bio}}"><i style="font-size: 20px" class="fas fa-info-circle"></i></span>
+                                        {% else %}
+                                            <span title="Kişi Bilgisi Bulunamadı."><i style="font-size: 20px" class="fas fa-info-circle"></i></span>
+                                        {% endif %}
+
+                                    </h2>
+                                    <h6 style="font-size:35px;font-family: 'Domine', serif;">
+                                        Stajyer
+                                    </h6>
+                                    <br>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" style="color: #0062cc" id="personal-tab" data-toggle="tab" href="#personal-{{ intern.id }}" role="tab" aria-controls="home" aria-selected="true" >Kişisel Bilgiler</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a style="color: #0062cc" class="nav-link" id="job-tab" data-toggle="tab" href="#job-{{ intern.id }}" role="tab" aria-controls="job" aria-selected="false">İş Bilgileri</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                        <div class="col-md-4">
+
+                        </div>
+
+                    <div class="col-md-8">
+                        <div class="tab-content profile-tab" id="myTabContent">
+                            <div class="tab-pane fade show active" id="personal-{{ intern.id }}" role="tabpanel" aria-labelledby="home-tab">
+                                    <div class="row">
+                                            <div class="col-md-6">
+                                                <label style="font-family: 'Domine', serif;">Kullanıcı Adı</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ intern.user.username }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Şehir</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ intern.user.city }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Üniversite</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ intern.university }}</p>
+                                            </div>
+                                        </div>
+
+                                         <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Cinsiyet</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                {% if intern.user.gender == "Male" %}
+                                                    <p>Erkek</p>
+                                                {% else %}
+                                                    <p>Kadın</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+
+                            </div>
+                            <div class="tab-pane fade" id="job-{{ intern.id }}" role="tabpanel" aria-labelledby="profile-tab">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Şirket</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ intern.user.company }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Başlama Tarihi</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ intern.begin_of_internship.isoformat }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Bitiş Tarihi</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ intern.end_of_internship.isoformat }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Toplam Çalışma Süresi</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ intern.worked_day_count }} iş günü</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Toplam Proje Sayısı</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ intern.own_projects }}</p>
+                                            </div>
+                                        </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+
+            {% endfor %}
+
+
+    {% endif %}
+
+
+
+    <script>
+        $('#messages').delay(3000).fadeOut('slow');
+    </script>
+
+    <script>
+        $( function() {
+           $( "#accordion" ).accordion({
+               collapsible: true,
+               heightStyle: "content",
+               active:false
+           });
+
+        } );
+
+    </script>
+
+{% endblock %}
+
+

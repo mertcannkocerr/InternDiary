@@ -1,0 +1,140 @@
+{% load static %}
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/navbar-top-fixed/">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Domine&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+
+    <style>
+        .nav-link{
+            font-family: 'Domine', serif;
+        }
+    </style>
+
+
+
+    {% block head %}
+    {% endblock %}
+
+
+</head>
+
+    <body>
+         <nav class="navbar navbar-expand navbar-dark fixed-top bg-dark" style="background-color: #2f3c7e !important; height: 70px; margin-left: 15px; margin-right: 15px" >
+            <a class="navbar-brand" href="{% url 'view_profile' %}" style="font-size: 32px !important; font: 400 20px/1.5 'Pacifico', Helvetica, sans-serif;" >Staj Günlüğü</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+             <div class="collapse navbar-collapse" id="navbarCollapse">
+
+              <!-- User nav bar for logged intern in users. -->
+
+                {% if user.is_authenticated and user.is_intern  and not user.is_superuser %}
+
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item active">
+                          <a class="nav-link" href="{% url 'view_profile' %}"><i class="fas fa-user"></i> Profil</a>
+                        </li>
+
+                        <li class="nav-item active">
+                          <a class="nav-link" href="/diaryRecords/"><i class="fas fa-book"></i> Günlüğüm</a>
+                        </li>
+                            <li class="nav-item active">
+                          <a class="nav-link" href="{% url 'view_all_projects' %}"><i class="fas fa-folder-open"></i> Projelerim</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Çıkış</a>
+                        </li>
+
+                    </ul>
+
+            <!-- User nav bar for logged in employee users. -->
+
+                {% elif user.is_authenticated and not user.is_intern and not user.is_superuser %}
+
+                    <ul class="navbar-nav ml-auto" >
+
+                        <li class="nav-item active">
+                          <a class="nav-link" href="{% url 'view_profile' %}"><i class="fas fa-user"></i> Profil</a>
+                        </li>
+                        <li class="nav-item active">
+                          <a class="nav-link" href="/diaryRecords/"><i class="fas fa-book"></i> Günlükler</a>
+                        </li>
+                        <li class="nav-item active">
+                          <a class="nav-link" href="{% url 'project_home' %}"><i class="fas fa-folder-open"></i> Projeler</a>
+                        </li>
+
+                        <li class="nav-item active">
+                          <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Çıkış</a>
+                        </li>
+
+                    </ul>
+
+
+            <!-- User nav bar for only admin -->
+
+                {% elif user.is_authenticated and user.is_superuser %}
+
+                     <ul class="navbar-nav ml-auto" >
+
+                        <li class="nav-item active">
+                          <a class="nav-link" href="{% url 'view_profile' %}"><i class="fas fa-user"></i> Profil</a>
+                        </li>
+                        <li class="nav-item active">
+                          <a class="nav-link" href="{% url 'edit_profile' %}"><i class="fas fa-user-edit"></i> Profili Düzenle</a>
+                        </li>
+                        <li class="nav-item active">
+                          <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Çıkış</a>
+                        </li>
+
+                     </ul>
+
+
+             <!-- User nav bar for non-logged in users. -->
+
+                {% else %}
+
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active">
+                          <a class="nav-link" href="{% url 'login' %}">Giriş Yap</a>
+                        </li>
+
+                    </ul>
+
+                {% endif %}
+
+          </div>
+        </nav>
+
+        <br><br>
+        <br><br>
+
+
+        {% block body %}
+        {% endblock %}
+
+
+    </body>
+
+
+</html>

@@ -1,0 +1,332 @@
+def registerEmployee(request):
+    if request.method == 'POST':
+        form = ExtendedUserCreationForm(request.POST)
+        profile_form = EmployeeProfileCreationForm(request.POST, request.FILES)
+
+        if form.is_valid() and profile_form.is_valid():
+            user = form.save(commit=False)
+            user.is_intern = False
+            user.save()
+
+            employee_profile = profile_form.save(commit=False)
+            employee_profile.user = user
+            employee_profile.image = profile_form.cleaned_data['image']
+
+            employee_profile.save()
+
+            return redirect('/accounts/login')
+
+        else:
+            return redirect('/accounts/register-employee/')
+
+    else:
+        form = ExtendedUserCreationForm()
+        profile_form = EmployeeProfileCreationForm()
+
+    args = {'form': form, 'profile_form': profile_form}
+    return render(request, 'accounts/registerEmployee.html', args)
+
+
+
+
+def registerIntern(request):
+    if request.method == 'POST':
+        form = ExtendedUserCreationForm(request.POST)
+        profile_form = InternProfileCreationForm(request.POST, request.FILES)
+
+        if form.is_valid() and profile_form.is_valid():
+            user = form.save(commit=False)
+            user.is_intern = True
+            user.save()
+
+            intern_profile = profile_form.save(commit=False)
+            intern_profile.user = user
+            intern_profile.image = profile_form.cleaned_data['image']
+
+            intern_profile.save()
+
+            current_date = timezone.now().date()
+            selected_days = 0
+
+            country = Turkey()
+
+            while True:
+                if selected_days == intern_profile.worked_day_count:
+                    break
+
+                elif country.is_working_day(current_date):
+                    record = WorkingDayRecord.objects.create(text='', related_intern=intern_profile,
+                                                             date=current_date)
+                    selected_days += 1
+
+                current_date += timezone.timedelta(days=1)
+
+            return redirect('/accounts/login')
+
+        else:
+            print(form.errors)
+            print(InternProfileCreationForm.errors)
+            return redirect("/accounts/register-intern")
+    else:
+        form = ExtendedUserCreationForm()
+        profile_form = InternProfileCreationForm()
+
+    context = {'form': form, 'profile_form': profile_form}
+    return render(request, 'accounts/registerIntern.html', context)
+
+
+def view_profile(request):
+    args = {'user': request.user}
+
+    if request.user.is_intern and not request.user.is_superuser:
+        args['intern_user'] = InternUser.objects.get(user_id=request.user.id)
+    elif not request.user.is_intern and not request.user.is_superuser:
+        args['employee_user'] = EmployeeUser.objects.get(user_id=request.user.id)
+    else:
+        pass
+    return render(request, 'accounts/profile.html', args)
+
+
+
+
+
+
+@login_required()
+def edit_profile(request):
+    if request.user.is_intern:
+        if request.method == 'POST':
+            user_form = UserEditProfileForm(request.POST, instance=request.user)
+            intern_form = InternEditProfileForm(request.POST, instance=request.user.internuser)
+
+            if user_form.is_valid() and intern_form.is_valid():
+                user_form.save()
+                intern_form.save()
+
+                return redirect('/accounts/profile')
+            else:
+                messages.info(request, user_form.errors)
+                messages.info(request, intern_form.errors)
+                return redirect('/accounts/profile/edit')
+        else:
+            user_form = UserEditProfileForm(instance=request.user)
+            intern_form = InternEditProfileForm(instance=request.user.internuser)
+            args = {'user_form': user_form, 'intern_form': intern_form}
+            return render(request, 'accounts/edit_profile.html', args)
+
+    elif not request.user.is_intern:
+        if request.method == 'POST':
+            user_form = UserEditProfileForm(request.POST, instance=request.user)
+            employee_form = EmployeeEditProfileForm(request.POST, instance=request.user.employeeuser)
+            print("*" * 30)
+            print(user_form.is_valid())
+            print(employee_form.is_valid())
+
+            if user_form.is_valid() and employee_form.is_valid():
+                user_form.save()
+                employee_form.save()
+
+                return redirect('/accounts/profile')
+
+            else:
+                messages.info(request, user_form.errors)
+                messages.info(request, employee_form.errors)
+                return redirect('/accounts/profile/edit')
+
+        else:
+            user_form = UserEditProfileForm(instance=request.user)
+            employee_form = EmployeeEditProfileForm(instance=request.user.employeeuser)
+            args = {'user_form': user_form, 'employee_form': employee_form}
+            return render(request, 'accounts/edit_profile.html', args)
+
+
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user:
+            login(request, user)
+            return redirect('/accounts/profile')
+        else:
+            messages.warning(request, "The username and password that you've entered doesn't match any account.")
+            return redirect('/accounts/login')
+
+    else:
+        return render(request, 'accounts/login.html')
+
+
+
+
+################################################# DiaryRecords #######################################################
+
+
+
+
+# For both employee and intern
+def diary_records_home(request):
+    if request.user.is_intern:
+        # Interns should see their diary records for each day in this home page
+        intern_user = InternUser.objects.get(user_id=request.user.id)
+        all_working_days = WorkingDayRecord.objects.filter(related_intern_id=intern_user.id)
+        current_date = date.today()
+        wanted_working_days = set()
+
+        for record in all_working_days:
+            if record.date == current_date or record.date < current_date:
+                wanted_working_days.add(record)
+
+        args = {
+            'user': request.user,
+            'intern_user': intern_user,
+            'Working_Day_Record': wanted_working_days
+        }
+
+        return render(request, 'diaryRecords/diary_records_home.html', args)
+
+    else:
+        # Employees should see all interns and their records in this page
+        all_interns = InternUser.objects.all()
+        all_working_day_records = WorkingDayRecord.objects.all()
+
+        args = {
+            'all_interns': all_interns,
+        }
+
+        return render(request, 'diaryRecords/diary_records_home.html', args)
+
+
+
+
+
+
+
+# For intern only
+def record_content_intern(request, record_id):
+    user = request.user
+    intern_user = InternUser.objects.get(user_id=request.user.id)
+    all_records = WorkingDayRecord.objects.filter(related_intern_id=intern_user.id)
+    current_record = WorkingDayRecord.objects.get(id=record_id)
+    today = timezone.now().date()
+
+    # Will give you a chance to show daily record only
+    for record in all_records:
+        if today == record.date:
+            record.enable = True
+            record.save()
+        else:
+            record.enable = False
+            record.save()
+
+    if request.method == 'POST':
+        update_form = DiaryUpdateForm(request.POST, instance=current_record)
+
+        if update_form.is_valid():
+            update_form.save()
+            return redirect('/diaryRecords')
+        else:
+            messages.info(request, update_form.errors)
+            return redirect('/diaryRecords')
+    else:
+        update_form = DiaryUpdateForm(instance=current_record)
+
+        args = {
+            'user': user,
+            'intern_user': intern_user,
+            'record': current_record,
+            'form': update_form,
+        }
+        return render(request, 'diaryRecords/diary_records_intern.html', args)
+
+
+
+
+def all_records_of_given_intern(request, intern_id):
+    selected_intern = get_object_or_404(InternUser, id=intern_id)
+    selected_intern_all_working_days = WorkingDayRecord.objects.filter(related_intern=selected_intern.id)
+    selected_intern_available_working_days = set()
+
+    for day in selected_intern_all_working_days:
+        if day.date <= date.today():
+            selected_intern_available_working_days.add(day)
+
+    args = {
+        'intern': selected_intern,
+        'working_days': selected_intern_available_working_days,
+    }
+
+    return render(request, 'diaryRecords/selected_intern_all_records_for_employee.html', args)
+
+
+
+
+# For employee only
+def detail_of_given_day(request, intern_id, day_id):
+    selected_intern = InternUser.objects.get(pk=intern_id)
+    selected_working_day = WorkingDayRecord.objects.get(pk=day_id)
+
+    args = {
+        'intern': selected_intern,
+        'working_day': selected_working_day
+    }
+
+    return render(request, 'diaryRecords/selected_day_of_given_intern_for_employee.html', args)
+
+
+
+######################################################PROJECT###########################################################
+
+
+
+
+def create_project(request):
+    emp_user = EmployeeUser.objects.get(user_id=request.user.id)
+
+    if request.method == 'POST':
+        create_project_form = CreateProjectForm(request.POST, emp_user=emp_user)
+
+        if create_project_form.is_valid():
+            create_project_form.save(commit=False)
+            if create_project_form.cleaned_data['assign_date'] < timezone.now().date():
+                raise ValueError("Invalid Assign Date")
+
+            elif create_project_form.cleaned_data['assign_date'] > create_project_form.cleaned_data['due_date']:
+                raise ValueError("Invalid Due Date")
+            else:
+                create_project_form.save()
+
+            return redirect('/projects')
+        else:
+            print(create_project_form.errors)
+
+            return redirect('/projects/create')
+
+    else:
+        create_project_form = CreateProjectForm(emp_user=emp_user)
+        args = {
+            'form': create_project_form
+        }
+        return render(request, 'projects/create_project.html', args)
+
+
+
+def view_given_projects(request):
+    intern_user = InternUser.objects.get(user_id=request.user.id)
+    given_projects = Project.objects.filter(assigned_intern_id=intern_user.id)
+
+    args = {
+        'intern_user': intern_user,
+        'given_projects': given_projects
+    }
+
+    return render(request, 'projects/view_projects.html', args)
+
+
+
+
+
+
+
+

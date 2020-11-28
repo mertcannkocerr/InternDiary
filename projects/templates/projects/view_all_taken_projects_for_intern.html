@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    <title>Projelerim</title>
+    <style>
+        html,body{
+            background-color: #fbeaeb;
+        }
+        h2{
+            font-family: 'Domine', serif;
+            font-size: 40px;
+            color: #2f3c7e;
+            font-weight: bold;
+            margin-top: 4%;
+            margin-bottom: 4%;
+        }
+        .container{
+            margin-top: 100px;
+        }
+         #accordion .ui-widget-content{
+            background: #ffd1ce;
+            font-size: 20px !important;
+            font-family: 'Domine', serif;
+         }
+        #accordion .ui-accordion-header{
+          background-image:none;
+          background-color:#333;
+          color:#fff;
+          font-size: 20px !important;
+          font-family: 'Domine', serif;
+        }
+
+
+    </style>
+{% endblock %}
+
+
+{% block body %}
+
+    <div class="container">
+
+        <center><h2 id="pageTitle">Projeleriniz</h2></center>
+        <br>
+        <br>
+
+        <div id="accordion">
+
+            {% for project in taken_projects %}
+                <h3>{{ project.title }}</h3>
+                <div>
+                    <br>
+                    <p><strong>Başlangıç Tarihi: {{ project.assign_date.isoformat }}</strong></p>
+                    <p><strong>Bitiş Tarihi: {{ project.due_date.isoformat }}</strong></p>
+                    <p><strong>Proje Sorumlusu: {{ project.assignee_employee.user.first_name }} {{ project.assignee_employee.user.last_name }}</strong></p>
+
+                    <br>
+                    <br>
+                    <p id="contentOfProject">
+                        {{project.content|safe}}
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <script>
+        $( function() {
+           $( "#accordion" ).accordion({
+               collapsible: true,
+               heightStyle: "content",
+               active: false
+           });
+        } );
+
+        $('#messages').delay(3000).fadeOut('slow');
+
+    </script>
+
+{% endblock %}

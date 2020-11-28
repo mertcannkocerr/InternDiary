@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Error</title>
+    <link href="https://fonts.googleapis.com/css?family=Domine&display=swap" rel="stylesheet">
+     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <style>
+
+        @import url('https://fonts.googleapis.com/css?family=Cabin+Sketch');
+
+        html {
+        	height: 100%;
+        }
+
+        body {
+            background-color: #fbeaeb;
+        	min-height: 100%;
+        }
+
+        body {
+        	display: flex;
+        }
+
+        h1 {
+        	font-family: 'Domine', serif;
+        	font-size: 3em;
+        	text-align: center;
+        	opacity: .8;
+        	order: 1;
+        }
+
+        h1 small {
+        	display: block;
+        }
+
+        .site {
+        	display: -webkit-box;
+        	display: -webkit-flex;
+        	display: -ms-flexbox;
+        	display: flex;
+        	-webkit-box-align: center;
+        	-webkit-align-items: center;
+        	-ms-flex-align: center;
+          align-items: center;
+        	flex-direction: column;
+        	margin: 0 auto;
+        	-webkit-box-pack: center;
+        	-webkit-justify-content: center;
+        	-ms-flex-pack: center;
+        	justify-content: center;
+        }
+
+
+        .sketch {
+        	position: relative;
+        	height: 400px;
+        	min-width: 400px;
+        	margin: 0;
+        	overflow: visible;
+        	order: 2;
+
+        }
+
+        .bee-sketch {
+        	height: 100%;
+        	width: 100%;
+        	position: absolute;
+        	top: 0;
+        	left: 0;
+        }
+
+        .red {
+        	background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/198554/blue-1.png) no-repeat center center;
+        	opacity: 1;
+        	animation: red 3s linear infinite, opacityBlue 5s linear alternate infinite;
+        }
+
+        @media only screen and (min-width: 780px) {
+          .site {
+        		flex-direction: row;
+        		padding: 1em 3em 1em 0em;
+        	}
+        	h1 {
+        		text-align: left;
+        		order: 2;
+        		padding-bottom: 2em;
+        		padding-left: 2em;
+                color: #2f3c7e;
+
+        	}
+    	    .sketch {
+    	    	order: 1;
+    	    }
+        }
+
+        .content{
+            margin-top: 10%;
+            margin-left: 10%;
+        }
+        .reasons{
+            font-size: 20px;
+            opacity: 0.5;
+            margin-top: 4%;
+            margin-bottom: 4%;
+        }
+        #redirection{
+            background-color: #fbeaeb;
+            color: #2f3c7e;
+            border-color: #eda593;
+        }
+        #redirection:hover{
+            background-color: #eda593;
+            color: #2f3c7e;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="site">
+    	<div class="sketch">
+    		<div class="bee-sketch red"></div>
+    		<div class="bee-sketch blue"></div>
+    	</div>
+
+    <h1>
+        <small style="font-size: 50px">Maalesef Bir Hata Oluştu</small>
+            <div class="content">
+                   {% if request.user.is_anonymous %}
+                         <li class="reasons">
+                            Bu alanı görebilmek için oturum açmak zorundasınız.
+                        </li>
+
+                       <button  name="redirection" type="button" class= "btn btn-danger btn-lg float-none" id="redirection" onclick="window.location.href = '/accounts/login';">Oturum Açın</button>
+                  {% elif request.user.is_intern and not request.user.is_superuser %}
+                        <li class="reasons">
+                            Çalışanlara Bağlı Bir Alana Erişmeye Çalışmış Olabilirsiniz.
+                        </li>
+                        <li class="reasons">
+                            Yetkiniz Dışındaki Bir Alana Erişmeye Çalışmış Olabilirsiniz.
+                        </li>
+                       <li class="reasons">
+                            Ulaşmaya Çalıştığınız Sayfa Bulunamamış Olabilir.
+                        </li>
+                                           <li class="reasons">
+                            Başka Bir Şirkete Ait Alana Erişmeye Çalışmış Olabilirsiniz.
+                        </li>
+                       <button  name="redirection" type="button" class= "btn btn-danger btn-lg float-none" id="redirection" onclick="window.location.href = '/accounts/profile/';">Profil Sayfasına Dön</button>
+                  {% elif not request.user.is_intern and not request.user.is_superuser%}
+                        <li class="reasons">
+                            Stajyerlere Bağlı Bir Alana Erişmeye Çalışmış Olabilirsiniz.
+                        </li>
+                        <li class="reasons">
+                            Yetkiniz Dışındaki Bir Alana Erişmeye Çalışmış Olabilirsiniz.
+                        </li>
+                       <li class="reasons">
+                            Ulaşmaya Çalıştığınız Sayfa Bulunamamış Olabilir.
+                        </li>
+                        <li class="reasons">
+                            Başka Bir Şirkete Ait Alana Erişmeye Çalışmış Olabilirsiniz.
+                        </li>
+                       <button  name="redirection" type="button" class= "btn btn-danger btn-lg float-none" id="redirection" onclick="window.location.href = '/accounts/profile/';">Profil Sayfasına Dön</button>
+                  {% elif request.user.is_superuser %}
+                        <li class="reasons">
+                            Yetkiniz Dışındaki Bir Alana Erişmeye Çalışmış Olabilirsiniz.
+                        </li>
+                        <li class="reasons">
+                            Çalışanlara Bağlı Bir Alana Erişmeye Çalışmış Olabilirsiniz.
+                        </li>
+                        <li class="reasons">
+                            Stajyerlere Bağlı Bir Alana Erişmeye Çalışmış Olabilirsiniz.
+                        </li>
+
+                        <li class="reasons">
+                            Ulaşmaya Çalıştığınız Sayfa Bulunamamış Olabilir.
+                        </li>
+                        <button  name="redirection" type="button" class= "btn btn-danger btn-lg float-none" id="redirection" onclick="window.location.href = '/admin/';">Admin Sayfasına Dön</button>
+                   {% endif %}
+                <br>
+
+            </div>
+        </h1>
+    </div>
+</body>
+
+</html>
+

@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+
+        <title>Projeler</title>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <style>
+
+            html,body{
+                background-color: #fbeaeb;
+            }
+
+            #accordion .ui-widget-content{
+                background: #ffd1ce;
+                font-size: 20px !important;
+                font-family: 'Domine', serif;
+
+            }
+            #accordion .ui-accordion-header{
+              background-image:none;
+              background-color:#333;
+              color:#fff;
+              font-size: 20px !important;
+              font-family: 'Domine', serif;
+            }
+
+            #pageTitle{
+                color: #2f3c7e;
+                margin-top: 4%;
+                margin-bottom: 4%;
+                font-size: 40px !important;
+                font-family: 'Domine', serif;
+                font-weight: bold;
+            }
+            #editButton{
+                background-color: #2f3c7e;
+                color: white;
+                border-color: #2f3c7e;
+                margin-top: 50px;
+            }
+
+            #editButton:hover{
+                background-color: #1c1bb1;
+
+            }
+            #deleteButton{
+                background-color: #ae0700;
+                color: white;
+                border-color: #ae0700;
+                margin-top: 50px;
+                margin-left: 5px;
+            }
+
+            #deleteButton:hover{
+                background-color: #ff3340;
+                color: white;
+
+            }
+
+            #contentOfProject{
+                margin-bottom: 10px;
+            }
+
+            #create_button{
+                background-color:#fbeaeb;
+                border-color: #2f3c7e;
+                color: #2f3c7e;
+                margin-top: 5%;
+            }
+            #create_button:hover{
+                background-color: #eda593;
+            }
+
+        </style>
+
+
+
+
+{% endblock %}
+
+
+{% block body %}
+
+
+
+    <center><h2 id="pageTitle"> Vermiş Olduğunuz Projeler</h2></center>
+
+        <div class="container" >
+
+
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {{message.tags}}"  role="alert" id="messages" >
+                        <center><i class="fas fa-exclamation">  {{ message }} </i></center>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+
+            <div id="accordion" style="margin-top: 3%">
+
+                {% for project in given_projects %}
+                    <h3>{{ project.title }}</h3>
+
+                    <div>
+                       <br>
+                       <p><strong>Başlangıç Tarihi: {{ project.assign_date.isoformat }}</strong></p>
+                       <p><strong>Bitiş Tarihi: {{ project.due_date.isoformat }}</strong></p>
+                       <p><strong>Proje Sahibi: {{ project.assigned_intern.user.first_name }} {{ project.assigned_intern.user.last_name }}</strong></p>
+
+                        <br><br>
+
+                       <p id="contentOfProject">
+                           {{project.content|safe}}
+                       </p>
+
+                       <button id="deleteButton" value="{{ project.id }}" name="edit" type="button" class= "btnDelete btn-info btn-lg float-right" ><i class="far fa-trash-alt"></i> Sil</button>
+                       <button id= "editButton" value="{{ project.id }}" name="edit" type="button" class= "btnEdit btn-info btn-lg float-right" onclick="window.location.href = '/projects/edit/{{ project.id }}';"><i class="far fa-edit"></i> Düzenle</button>
+                     </div>
+                {% endfor %}
+            </div>
+        <button  name="create" type="button" class= "btn btn-danger btn-lg float-right" id="create_button" onclick="window.location.href = '/projects/create/';"><i class="fas fa-edit"></i> Proje Oluştur</button>
+
+
+        </div>
+
+    <script>
+        $('#messages').delay(3000).fadeOut('slow');
+    </script>
+
+    <script>
+        $( function() {
+           $( "#accordion" ).accordion({
+               collapsible: true,
+               heightStyle: "content",
+               active: false
+           });
+
+        } );
+
+
+        $( document ).ready(function() {
+
+            $('.btnDelete').on('click', function(e) {
+                var projectId = ($(e.target).prop('value'))
+                swal({
+                    title: "Bu Projeyi Silmek İstediğinizden Emin Misiniz?",
+                    text: "Silinen Projeler Geri Getirilemez!",
+                    icon: "warning",
+                    buttons: ["Hayır", "Evet"],
+                    dangerMode: true,
+
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                      swal("Proje Başarı İle Silindi.", {
+                        icon: "success",
+                      });
+
+                      setTimeout(function() {
+                            window.location.href = '/projects/delete/' + projectId;
+                      }, 1700);
+
+                    }
+                    else {
+                      swal("İşlem İptal Edildi.");
+                    }
+                });
+            });
+        });
+
+    </script>
+
+
+
+{% endblock %}

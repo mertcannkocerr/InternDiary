@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    <script>$( function() {
+        $( "#accordion" ).accordion({
+            collapsible: true,
+            heightStyle: "content",
+            active:false
+        });
+
+    } );
+
+    </script>
+
+    <title>Günlük {{ intern.user.first_name }}</title>
+
+    <style>
+        body,head {
+            background-color: #fbeaeb;
+        }
+
+
+        #accordion .ui-widget-content{
+            background: #ffd1ce;
+            font-size: 20px !important;
+            font-family: 'Domine', serif;
+
+
+        }
+        #accordion .ui-accordion-header{
+          background-image:none;
+          background-color:#333;
+          color:#fff;
+          font-size: 20px !important;
+          font-family: 'Domine', serif;
+        }
+
+        .container{
+            margin-top: 100px;
+
+        }
+
+        #pageTitleIntern{
+           color: #2f3c7e;
+           margin-top: 4%;
+           margin-bottom: 10%;
+           font-size: 40px !important;
+           font-family: 'Domine', serif;
+            font-weight: bold;
+        }
+
+    </style>
+
+{% endblock %}
+
+
+
+
+{% block body %}
+
+    <div class="container">
+
+        <center><h2 id="pageTitleIntern">Günlük Kayıtları</h2></center>
+        <h2 style="font-size: 25px !important;font-family: 'Domine', serif;color: #2f3c7e;">Stajyer: {{ intern.user.first_name }} {{ intern.user.last_name }}</h2>
+         <br>
+         <div id="accordion">
+                {% for day in working_days %}
+
+                    <h3>{{ day.date.isoformat }}</h3>
+                    <div>
+                        <br>
+                       <p id="contentOfRecord">
+                            {{ day.text|safe }}
+                       </p>
+
+                     </div>
+                {% endfor %}
+            </div>
+         <br>
+
+    </div>
+
+
+
+
+
+
+
+
+{% endblock %}
